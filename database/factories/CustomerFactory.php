@@ -26,6 +26,7 @@ class CustomerFactory extends Factory
             'package_id' => Package::factory(),
             'bill' => fake()->randomFloat(2, 100, 10000),
             'status' => fake()->boolean(80), // 80% chance of being active
+            'billing_start_date' => fake()->dateTimeBetween('-2 month', 'now'),
         ];
     }
 
