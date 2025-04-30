@@ -21,6 +21,7 @@
         "vue": "^3.3.13"
     },
     "dependencies": {
-        "@inertiajs/vue3": "^2.0.8"
+        "@inertiajs/vue3": "^2.0.8",
+        "moment": "^2.30.1"
     }
 }

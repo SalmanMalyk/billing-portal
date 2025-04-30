@@ -8,31 +8,32 @@ use Inertia\Inertia;
 
 class PackageController extends Controller
 {
-/**
- * Display a listing of the resource.
- */
-public function index(Request $request)
-{
-    $search = $request->input('search', '');
-    
-    $packages = Package::when($search, function ($query, $search) {
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $search = $request->input('search', '');
+
+        $packages = Package::when($search, function ($query, $search) {
             $query->where(function ($query) use ($search) {
                 $query->where('title', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%")
                     ->orWhere('fee', 'like', "%{$search}%");
             });
         })
-        ->latest()
-        ->paginate(30)
-        ->withQueryString();
-    
-    return Inertia::render('Packages/Index', [
-        'packages' => $packages,
-        'filters' => [
-            'search' => $search,
-        ],
-    ]);
-}
+            ->withCount('customers')
+            ->latest()
+            ->paginate(30)
+            ->withQueryString();
+
+        return Inertia::render('Packages/Index', [
+            'packages' => $packages,
+            'filters' => [
+                'search' => $search,
+            ],
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -65,7 +66,7 @@ public function index(Request $request)
     public function show(Package $package)
     {
         return Inertia::render('Packages/Show', [
-            'package' => $package
+            'package' => $package,
         ]);
     }
 
@@ -75,7 +76,7 @@ public function index(Request $request)
     public function edit(Package $package)
     {
         return Inertia::render('Packages/Edit', [
-            'package' => $package
+            'package' => $package,
         ]);
     }
 
@@ -105,7 +106,7 @@ public function index(Request $request)
         if ($package->customers()->count() > 0) {
             return back()->with('error', 'Cannot delete a package that has customers assigned to it.');
         }
-        
+
         $package->delete();
 
         return redirect()->route('packages.index')

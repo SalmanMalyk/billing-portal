@@ -1,5 +1,6 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import moment from "moment";
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 defineProps({
@@ -110,7 +111,21 @@ defineProps({
                                     </div>
                                     <div>
                                         <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">Address</h4>
-                                        <p class="mt-1 text-base text-gray-900 dark:text-gray-100">{{ customer.address }}</p>
+                                        <p class="mt-1 text-base text-gray-900 dark:text-gray-100">{{ customer.address ?? 'Not Set' }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex">
+                                    <div class="w-8 text-gray-400 flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">Created At</h4>
+                                        <p class="mt-1 text-base text-gray-900 dark:text-gray-100">
+                                            {{ customer.created_at ? moment(customer.created_at).format('LLL') : 'Not set' }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +161,9 @@ defineProps({
                                     </div>
                                     <div>
                                         <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">Bill</h4>
-                                        <p class="mt-1 text-base font-medium text-gray-900 dark:text-gray-100">{{ customer.bill }}</p>
+                                        <p class="mt-1 text-base font-medium text-gray-900 dark:text-gray-100">
+                                            {{ customer.bill }} <span class="text-xs text-gray-400">-/PKR</span>
+                                        </p>
                                         <p v-if="customer.bill !== customer.package.fee" class="text-sm text-gray-500 dark:text-gray-400">
                                             (Package standard fee: {{ customer.package.fee }})
                                         </p>
@@ -162,7 +179,7 @@ defineProps({
                                     <div>
                                         <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">Billing Start Date</h4>
                                         <p class="mt-1 text-base text-gray-900 dark:text-gray-100">
-                                            {{ customer.billing_start_date ? new Date(customer.billing_start_date).toLocaleDateString() : 'Not set' }}
+                                            {{ customer.billing_start_date ? moment(customer.billing_start_date).format('LL') : 'Not set' }}
                                         </p>
                                     </div>
                                 </div>
